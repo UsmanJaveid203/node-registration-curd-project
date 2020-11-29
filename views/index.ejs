@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+ 
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <title><%= title %></title>
+</head>
+
+<body>
+  <!-- Filter Form -->
+  <form action="/search" method="post">
+    <h1 style="text-align: center; color: gray;">Filter Record here</h1>
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="namesearch">By Name</label>
+        <input type="text" class="form-control" name="enamee" id="namesearch" aria-describedby="emailHelp">
+      </div>
+      <div class="form-group col-md-3">
+        <label for="exampleInputPassword1">By Email</label>
+        <input type="email" class="form-control" name="empmaill" id="exampleInputPassword1">
+      </div>
+      <div class="form-group col-md-3">
+        <label for="exampleInputEmail1">By Employee Type</label>
+        <select class="form-control" name="emptypee">
+          <option value="Hourly">Hourly</option>
+          <option value="Fixed">Fixed</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="email" class="col-md-12 control-label">&nbsp;</label>
+
+          <div class="col-md-12">
+            <input type="submit" class="form-control btn btn-primary" name="submit" placeholder="Filter">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+
+<!-- Table for showing records -->
+  <div>
+    <h1 style="text-align: center; color: gray;"><%= title %></h1>
+    <table id="myTable" class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Employee Type</th>
+          <th scope="col">Hourly Rate</th>
+          <th scope="col">Total Hour</th>
+          <th scope="col">Total</th>
+          <th scope="col">Profile</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if(records != ''){ 
+          records.forEach((row)=>{ %>
+        <tr>
+          <td onclick="changeData('<%= row._id %>')"><%= row.name %></td>
+          <td onclick="changeData('<%= row._id %>')"><%= row.email %></td>
+          <td onclick="changeData('<%= row._id %>')"><%= row.etype %></td>
+          <td onclick="changeData('<%= row._id %>')"><%= row.hourlyrate %></td>
+          <td onclick="changeData('<%= row._id %>')"><%= row.totalHour %></td>
+          <td onclick="changeData('<%= row._id %>')"><img src="./uploads/<%= row.image %>" alt="Pic" width="80" height="80"></td>
+          <td onclick="changeData('<%= row._id %>')"><%= row.total %></td>
+          <td>
+            <a href="/edit/<%= row._id %>" class="btn "><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            <a href="/delete/<%= row._id %>" class="btn  "><i class="fa fa-trash" aria-hidden="true"></i></a>
+          </td>
+        </tr>
+        <% })}else{ %>
+        <tr>
+          <td style="text-align: center; color: red; " colspan="6">Record not Found</td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+
+<!-- Admission Form -->
+  <div class="mt-5 container"
+    style="border: 1px solid black; background-color: whitesmoke;  border-top-left-radius: 30px; border-bottom-right-radius: 30px;">
+    <div class="mt-4 mb-4">
+      <form class="container" action="/" method="post" enctype="multipart/form-data">
+        <h1 style="text-align: center; color: gray;">Registration Form</h1>
+        <% if(success!=''){ %>
+        <p style="text-align: center; color: green;"><%= success %></p>
+        <% } %>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Name</label>
+          <input type="text" class="form-control" name="ename" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Email</label>
+          <input type="email" class="form-control" name="empmail" id="exampleInputPassword1">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Employee Type</label>
+          <select class="form-control" name="emptype">
+            <option value="Hourly">Hourly</option>
+            <option value="Fixed">Fixed</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Hourly Rate</label>
+          <input type="text" class="form-control" name="hrlyrate" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Total Hour</label>
+          <input type="text" class="form-control" name="ttlhrs" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">profile File</label>
+          <input type="file" class="form-control" name="file" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+  <script lang="javascript">
+    $(document).ready(function () {
+      $('#myTable').DataTable();
+    });
+  </script>
+  <script lang="javascript">
+    function changeData(id){
+        window.location.href="/edit/"+id;
+    }
+  </script>
+</body>
+
+</html>
